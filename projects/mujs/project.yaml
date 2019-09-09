@@ -1,0 +1,7 @@
+homepage: "https://www.mujs.com"
+primary_contact: tor.andersson@artifex.com
+sanitizers:
+  - address
+  - memory
+auto_ccs:
+  - sebastian.rasmussen@artifex.com
