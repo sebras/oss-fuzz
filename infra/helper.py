@@ -913,7 +913,7 @@ def reproduce_impl(  # pylint: disable=too-many-arguments
       'gcr.io/oss-fuzz-base/%s' % image_name,
       'reproduce',
       fuzzer_name,
-      '-runs=100',
+      '-runs=1',
   ] + fuzzer_args
 
   return runner(run_args)
