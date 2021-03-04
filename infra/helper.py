@@ -314,12 +314,14 @@ def _get_project_language(project_name):
   """Returns project language."""
   project_yaml_path = os.path.join(OSS_FUZZ_DIR, 'projects', project_name,
                                    'project.yaml')
-  with open(project_yaml_path) as file_handle:
-    content = file_handle.read()
-    for line in content.splitlines():
-      match = PROJECT_LANGUAGE_REGEX.match(line)
-      if match:
-        return match.group(1)
+
+  if os.path.exists(project_yaml_path):
+    with open(project_yaml_path) as file_handle:
+      content = file_handle.read()
+      for line in content.splitlines():
+        match = PROJECT_LANGUAGE_REGEX.match(line)
+        if match:
+          return match.group(1)
 
   return None
 
