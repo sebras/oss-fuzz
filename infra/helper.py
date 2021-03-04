@@ -961,8 +961,11 @@ def shell(args):
       'FUZZING_ENGINE=' + args.engine,
       'SANITIZER=' + args.sanitizer,
       'ARCHITECTURE=' + args.architecture,
-      'FUZZING_LANGUAGE=' + _get_project_language(args.project_name),
   ]
+
+  lang = _get_project_language(args.project_name)
+  if lang:
+    env.append('FUZZING_LANGUAGE=' + lang)
 
   if args.e:
     env += args.e
