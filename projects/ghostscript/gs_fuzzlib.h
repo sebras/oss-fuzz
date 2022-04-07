@@ -66,6 +66,16 @@ int gs_to_raster_fuzz(
 	return fuzz_gs_device(buf, size, color_scheme, "cups", "/dev/null", 0);
 }
 
+static int max_polls = 0;
+
+int gp_check_interrupts(const gs_memory_t *mem)
+{
+	if (max_polls < 0)
+		return 1;
+	max_polls--;
+	return 0;
+}
+
 int fuzz_gs_device(
 	const unsigned char *buf,
 	size_t size,
@@ -136,6 +146,7 @@ int fuzz_gs_device(
 		return ret;
 	}
 
+	max_polls = 10;
 	ret = gsapi_init_with_args(gs, argc, args);
 	if (ret && ret != gs_error_Quit)
 		/* Just keep going, to cleanup. */
