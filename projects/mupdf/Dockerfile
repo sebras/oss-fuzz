@@ -63,6 +63,21 @@ RUN wget -r -p -nc -np --level=0 https://sembiance.com/fileFormatSamples/image/p
 RUN wget -r -p -nc -np --level=0 https://sembiance.com/fileFormatSamples/image/svg/ && \
     zip -q -u $SRC/pdf_fuzzer_seed_corpus.zip sembiance.com/fileFormatSamples/image/svg/* && \
     rm -rf sembiance.com/fileFormatSamples/image/svg
+RUN wget -r -p -nc -np --level=0 https://sembiance.com/fileFormatSamples/document/xps/ && \
+    zip -q -u $SRC/pdf_fuzzer_seed_corpus.zip sembiance.com/fileFormatSamples/document/xps/* && \
+    rm -rf sembiance.com/fileFormatSamples/document/xps
+RUN wget -r -p -nc -np --level=0 https://sembiance.com/fileFormatSamples/document/fictionBook/ && \
+    zip -q -u $SRC/pdf_fuzzer_seed_corpus.zip sembiance.com/fileFormatSamples/document/fictionBook/* && \
+    rm -rf sembiance.com/fileFormatSamples/document/fictionBook
+RUN wget -r -p -nc -np --level=0 https://sembiance.com/fileFormatSamples/document/mobi/ && \
+    zip -q -u $SRC/pdf_fuzzer_seed_corpus.zip sembiance.com/fileFormatSamples/document/mobi/* && \
+    rm -rf sembiance.com/fileFormatSamples/document/mobi
+RUN wget -r -p -nc -np --level=0 https://sembiance.com/fileFormatSamples/document/epub/ && \
+    zip -q -u $SRC/pdf_fuzzer_seed_corpus.zip sembiance.com/fileFormatSamples/document/epub/* && \
+    rm -rf sembiance.com/fileFormatSamples/document/epub
+RUN wget -r -p -nc -np --level=0 https://sembiance.com/fileFormatSamples/text/html/ && \
+    zip -q -u $SRC/pdf_fuzzer_seed_corpus.zip sembiance.com/fileFormatSamples/text/html/* && \
+    rm -rf sembiance.com/fileFormatSamples/text/html
 ADD https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/pdf.dict $SRC/pdf_fuzzer.dict
 WORKDIR mupdf
 COPY *.cc $SRC/
