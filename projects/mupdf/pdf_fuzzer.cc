@@ -124,32 +124,63 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   fz_context *ctx;
   fz_stream *stream;
   fz_document *doc;
+  fz_outline *outline;
+  fz_page *page;
   fz_pixmap *pix;
+  fz_buffer *buf;
+  fz_link *links;
 
   used = 0;
 
   ctx = fz_new_context(&fz_alloc_ossfuzz, nullptr, FZ_STORE_DEFAULT);
   stream = NULL;
   doc = NULL;
+  outline = NULL;
+  page = NULL;
   pix = NULL;
+  buf = NULL;
+  links = NULL;
 
   fz_var(stream);
   fz_var(doc);
+  fz_var(outline);
+  fz_var(page);
   fz_var(pix);
+  fz_var(buf);
+  fz_var(links);
 
   fz_try(ctx) {
     fz_register_document_handlers(ctx);
     stream = fz_open_memory(ctx, data, size);
     doc = fz_open_document_with_stream(ctx, "pdf", stream);
 
+    outline = fz_load_outline(ctx, doc);
+
     for (int i = 0; i < fz_count_pages(ctx, doc); i++) {
-      pix = fz_new_pixmap_from_page_number(ctx, doc, i, fz_identity, fz_device_rgb(ctx), 0);
+      page = fz_load_page(ctx, doc, number);
+
+      pix = fz_new_pixmap_from_page_with_separations(ctx, page, fz_identity, fz_device_rgb(ctx), NULL, 1);
       fz_drop_pixmap(ctx, pix);
       pix = NULL;
+
+      buf = fz_new_buffer_from_page(ctx, page, NULL);
+      fz_drop_buffer(ctx, buf);
+      buf = NULL;
+
+      links = fz_load_links(ctx, page);
+      fz_drop_link(ctx, links);
+      links = NULL;
+
+      fz_drop_page(ctx, page);
+      page = NULL;
     }
   }
   fz_always(ctx) {
+    fz_drop_link(ctx, links);
+    fz_drop_buffer(ctx, buf);
     fz_drop_pixmap(ctx, pix);
+    fz_drop_page(ctx, page);
+    fz_drop_outline(ctx, outline);
     fz_drop_document(ctx, doc);
     fz_drop_stream(ctx, stream);
   }
